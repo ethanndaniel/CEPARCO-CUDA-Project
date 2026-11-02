@@ -2,6 +2,10 @@
 ### 1st Term AY 2026-2027 | S01 Group 2
 ---
 
+### Google Colab Link
+https://colab.research.google.com/drive/1EojhZSnuqczWude7W41ZF374XOYGh4Xf?usp=sharing
+
+
 ### Members
 | Name | GitHub |
 | :--- | :--- |
