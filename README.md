@@ -115,19 +115,19 @@ Nsight Systems was used to examine the execution timeline of the CUDA implementa
 
 ### CUDA V2
 
-![Nsight Systems V2](Screenshots/nsight/V2_Nsight.png)
+![Nsight Systems V2](Screenshots/nsight/CudaV2.png)
 
 ### CUDA V3
 
-![Nsight Systems V3](Screenshots/nsight/V3_Nsight.png)
+![Nsight Systems V3](Screenshots/nsight/CudaV3.png)
 
 ### CUDA V4
 
-![Nsight Systems V4](Screenshots/nsight/V4_Nsight.png)
+![Nsight Systems V4](Screenshots/nsight/CudaV4.png)
 
 ### CUDA V5
 
-![Nsight Systems V5](Screenshots/nsight/V5_Nsight.png)
+![Nsight Systems V5](Screenshots/nsight/CudaV5.png)
 
 ### Nsight Systems Summary
 
