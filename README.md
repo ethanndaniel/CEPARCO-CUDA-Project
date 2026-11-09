@@ -75,35 +75,83 @@ The C implementation serves as the baseline for checking the correctness of the 
 
 ### CUDA V2: Unified Memory without Prefetch
 
-![CUDA V2 Output](Screenshots/nvcc/CudaV2_2^20.png)
+**2^20:**
 
 ![CUDA V2 Output](Screenshots/nvcc/CudaV2_2^20.png)
 
-![CUDA V2 Output](Screenshots/nvcc/CudaV2_2^20.png)
+![CUDA V2 Output](Screenshots/nvcc/CudaV2_2^20_C.png)
+
+**2^24:**
+
+![CUDA V2 Output](Screenshots/nvcc/CudaV2_2^24.png)
+
+![CUDA V2 Output](Screenshots/nvcc/CudaV2_2^24_C.png)
+
+**2^26:**
+
+![CUDA V2 Output](Screenshots/nvcc/CudaV2_2^26.png)
+
+![CUDA V2 Output](Screenshots/nvcc/CudaV2_2^26_C.png)
 
 ### CUDA V3: Unified Memory with Prefetch
 
+**2^20:**
+
 ![CUDA V3 Output](Screenshots/nvcc/CudaV3_2^20.png)
+
+![CUDA V3 Output](Screenshots/nvcc/CudaV3_2^20_C.png)
+
+**2^24:**
 
 ![CUDA V3 Output](Screenshots/nvcc/CudaV3_2^24.png)
 
+![CUDA V3 Output](Screenshots/nvcc/CudaV3_2^24_C.png)
+
+**2^26:**
+
 ![CUDA V3 Output](Screenshots/nvcc/CudaV3_2^26.png)
+
+![CUDA V3 Output](Screenshots/nvcc/CudaV3_2^26_C.png)
 
 ### CUDA V4: Unified Memory with Prefetch and Explicit Page Creation
 
+**2^20:**
+
 ![CUDA V4 Output](Screenshots/nvcc/CudaV4_2^20.png)
+
+![CUDA V4 Output](Screenshots/nvcc/CudaV4_2^20_C.png)
+
+**2^24:**
 
 ![CUDA V4 Output](Screenshots/nvcc/CudaV4_2^24.png)
 
+![CUDA V4 Output](Screenshots/nvcc/CudaV4_2^24_C.png)
+
+**2^26:**
+
 ![CUDA V4 Output](Screenshots/nvcc/CudaV4_2^26.png)
+
+![CUDA V4 Output](Screenshots/nvcc/CudaV4_2^26_C.png)
 
 ### CUDA V5: Unified Memory with Prefetch, Explicit Page Creation, and Memory Advice
 
+**2^20:**
+
 ![CUDA V5 Output](Screenshots/nvcc/CudaV5_2^20.png)
+
+![CUDA V5 Output](Screenshots/nvcc/CudaV5_2^20_C.png)
+
+**2^24:**
 
 ![CUDA V5 Output](Screenshots/nvcc/CudaV5_2^24.png)
 
+![CUDA V5 Output](Screenshots/nvcc/CudaV5_2^24_C.png)
+
+**2^26:**
+
 ![CUDA V5 Output](Screenshots/nvcc/CudaV5_2^26.png)
+
+![CUDA V5 Output](Screenshots/nvcc/CudaV5_2^26_C.png)
 
 All CUDA configurations passed the correctness checks against the C implementation.
 
@@ -135,10 +183,10 @@ Across the four CUDA variants, the `asum_kernel` accounts for the largest portio
 
 | Variant | Kernel Execution Time | Kernel Percentage | Unified Memory HtoD Time | HtoD Percentage |
 |---|---:|---:|---:|---:|
-| V2 | 390.048 ms | 91.2% | 36.079 ms | 8.4% |
-| V3 | 241.486 ms | 80.6% | 56.309 ms | 18.8% |
-| V4 | 239.361 ms | 80.5% | 56.300 ms | 18.9% |
-| V5 | 240.870 ms | 80.5% | 56.333 ms | 18.8% |
+| V2 | 385.494 ms | 90.8% | 36.969 ms | 8.7% |
+| V3 | 261.944 ms | 81.6% | 56.326 ms | 17.5% |
+| V4 | 251.452 ms | 81.0% | 56.340 ms | 18.2% |
+| V5 | 251.164 ms | 81.0% | 56.362 ms | 18.2% |
 
 
 The profiling results show that GPU kernel execution accounts for the largest portion of GPU activity across all four CUDA variants. The main ASUM kernel, `asum_kernel`, performs the majority of the computation, while the final reduction kernel, `final_kernel`, combines the partial sums produced by each block.
@@ -157,9 +205,9 @@ The following table presents the average execution time of the C implementation 
 
 | Array Size | C Answer Key | Average Execution Time | Minimum Time | Maximum Time |
 |---|---:|---:|---:|---:|
-| 2^20 | 549755289600 | 3.5865 ms | 3.306 ms | 3.925 ms |
-| 2^24 | 140737479966720 | 57.4267 ms | 55.989 ms | 60.720 ms |
-| 2^26 | 2251799780130816 | 239.9305 ms | 224.577 ms | 260.875 ms |
+| 2^20 | 549755289600 | 3.2959 ms | 3 ms | 3.667 ms |
+| 2^24 | 140737479966720 | 54.219 ms | 51.12 ms | 60.942 ms |
+| 2^26 | 2251799780130816 | 225.2845 ms | 209.655 ms | 257.67 ms |
 
 ### B. CUDA Average Kernel Execution Times
 
@@ -169,33 +217,33 @@ The following tables show the average kernel execution times of each CUDA varian
 
 | Array Size | Block Size 256 | Block Size 512 | Block Size 1024 |
 |---|---:|---:|---:|
-| 2^20 | 0.0481 ms | 0.0842 ms | 0.1707 ms |
-| 2^24 | 0.5161 ms | 0.5206 ms | 0.5230 ms |
-| 2^26 | 2.0549 ms | 2.0367 ms | 2.0394 ms |
+| 2^20 | 0.1623 ms | 0.1966 ms | 0.3329 ms |
+| 2^24 | 1.367 ms | 0.5605 ms | 0.7157 ms |
+| 2^26 | 5.3368 ms | 2.1433 ms | 2.0639 ms |
 
 #### CUDA V3: Unified Memory with Prefetch
 
 | Array Size | Block Size 256 | Block Size 512 | Block Size 1024 |
 |---|---:|---:|---:|
-| 2^20 | 0.0548 ms | 0.1017 ms | 0.2059 ms |
-| 2^24 | 0.5208 ms | 0.5248 ms | 0.5333 ms |
-| 2^26 | 2.0862 ms | 2.0777 ms | 2.0852 ms |
+| 2^20 | 0.0785 ms | 0.141 ms | 0.2939 ms |
+| 2^24 | 0.5364 ms | 0.5502 ms | 0.6174 ms |
+| 2^26 | 2.0776 ms | 2.088 ms | 2.0402 ms |
 
 #### CUDA V4: Unified Memory with Prefetch and Explicit Page Creation
 
 | Array Size | Block Size 256 | Block Size 512 | Block Size 1024 |
 |---|---:|---:|---:|
-| 2^20 | 0.0525 ms | 0.0876 ms | 0.1754 ms |
-| 2^24 | 0.5246 ms | 0.5236 ms | 0.5247 ms |
-| 2^26 | 2.0995 ms | 2.0624 ms | 2.0519 ms |
+| 2^20 | 0.1087 ms | 0.1995 ms | 0.4191 ms |
+| 2^24 | 0.5395 ms | 0.553 ms | 0.6171 ms |
+| 2^26 | 2.1234 ms | 2.1225 ms | 2.2456 ms |
 
 #### CUDA V5: Unified Memory with Prefetch, Explicit Page Creation, and Memory Advice
 
 | Array Size | Block Size 256 | Block Size 512 | Block Size 1024 |
 |---|---:|---:|---:|
-| 2^20 | 0.0550 ms | 0.0971 ms | 0.1973 ms |
-| 2^24 | 0.5362 ms | 0.5324 ms | 0.5344 ms |
-| 2^26 | 2.0835 ms | 2.0728 ms | 2.0989 ms |
+| 2^20 | 0.0709 ms | 0.1233 ms | 0.2512 ms |
+| 2^24 | 0.5279 ms | 0.5359 ms | 0.5541 ms |
+| 2^26 | 2.0595 ms | 2.0353 ms | 2.0355 ms |
 
 All CUDA configurations passed the correctness check against the C answer key.
 
@@ -244,11 +292,11 @@ $$
 
 | Implementation | Average Execution Time | Speedup vs. C |
 |---|---:|---:|
-| C Baseline | 57.4267 ms | 1.00x |
-| CUDA V2 | 0.5161 ms | 111.27x |
-| CUDA V3 | 0.5208 ms | 110.27x |
-| CUDA V4 | 0.5246 ms | 109.47x |
-| CUDA V5 | 0.5362 ms | 107.10x |
+| C Baseline | 54.2189 ms | 1.00x |
+| CUDA V2 | 1.367 ms | 39.66x |
+| CUDA V3 | 0.5364 ms | 101.08x |
+| CUDA V4 | 0.5395 ms | 100.5x |
+| CUDA V5 | 0.5279 ms | 102.71x |
 
 **Note:** These speedup values compare the C execution time against CUDA kernel execution time only. They exclude memory setup operations, prefetching, and other overhead, so they do not represent the speedup of the entire CUDA program.
 
@@ -272,25 +320,25 @@ CUDA V2 does not perform explicit memory prefetching or page creation. Instead, 
 
 | Array Size | Prefetch Time |
 |---|---:|
-| 2^20 | 0.9062 ms |
-| 2^24 | 11.4364 ms |
-| 2^26 | 46.0979 ms |
+| 2^20 | 0.9368 ms |
+| 2^24 | 11.4888 ms |
+| 2^26 | 46.1292 ms |
 
 #### CUDA V4: Page Creation and Prefetch Setup Time
 
 | Array Size | Page Creation Time | Prefetch Time |
 |---|---:|---:|
-| 2^20 | 4.4716 ms | 0.9206 ms |
-| 2^24 | 61.7331 ms | 11.6792 ms |
-| 2^26 | 245.2605 ms | 46.0528 ms |
+| 2^20 | 2.6692 ms | 0.8745 ms |
+| 2^24 | 40.1488 ms | 11.453 ms |
+| 2^26 | 167.4297 ms | 45.3366 ms |
 
 #### CUDA V5: Page Creation and Advice + Prefetch Setup Time
 
 | Array Size | Page Creation Time | Advice + Prefetch Time |
 |---|---:|---:|
-| 2^20 | 4.0491 ms | 2.0503 ms |
-| 2^24 | 63.4047 ms | 27.9499 ms |
-| 2^26 | 275.9889 ms | 93.6388 ms |
+| 2^20 | 2.6732 ms | 1.4257 ms |
+| 2^24 | 40.7880 ms | 20.0639 ms |
+| 2^26 | 178.1171 ms | 88.8462 ms |
 
 The results show that memory preparation introduces additional overhead before kernel execution. This overhead becomes more significant as the array size increases, particularly for the variants that perform explicit page creation. Therefore, kernel execution time alone does not represent the total time required by each CUDA implementation.
 
@@ -320,7 +368,7 @@ The C implementation serves as the baseline for the CUDA speedup calculations.
 
 At 2^24 elements and a block size of 256, all four CUDA variants achieved substantially lower average kernel execution times than the C baseline.
 
-CUDA V2 achieved the highest measured kernel speedup at approximately 111.27x, followed by CUDA V3 at 110.27x, CUDA V4 at 109.47x, and CUDA V5 at 107.10x.
+CUDA V5 achieved the highest measured kernel speedup at approximately 102.71x, followed by CUDA V3 at 101.08x, CUDA V4 at 100.5x, and CUDA V2 at 39.66x.
 
 For the CPU implementations, SIMD YMM achieved the highest speedup among the x86-64 Assembly, SIMD XMM, and SIMD YMM implementations in the earlier benchmark.
 
@@ -364,14 +412,14 @@ The following results were collected for the selected `asum_kernel` configuratio
 
 | Metric | V2 | V3 | V4 | V5 |
 |---|---:|---:|---:|---:|
-| Kernel Duration | 559.49 µs | 561.41 µs | 569.63 µs | 571.33 µs |
-| DRAM Throughput | 90.28% | 88.04% | 90.23% | 88.64% |
-| L1/TEX Cache Throughput | 33.09% | 33.06% | 33.02% | 32.52% |
-| L2 Cache Throughput | 28.52% | 28.36% | 27.92% | 27.86% |
-| Compute Throughput | 70.78% | 70.77% | 71.32% | 69.93% |
+| Kernel Duration | 575.26 µs | 575.23 µs | 569.63 µs | 569.50 µs |
+| DRAM Throughput | 88.18% | 87.85% | 90.23% | 91.05% |
+| L1/TEX Cache Throughput | 33.20% | 32.99% | 33.02% | 33.20% |
+| L2 Cache Throughput | 26.68% | 26.69% | 27.92% | 26.95% |
+| Compute Throughput | 70.83% | 70.87% | 71.32% | 71.17% |
 | Registers per Thread | 22 | 22 | 22 | 22 |
-| Achieved Occupancy | 98.06% | 98.32% | 98.13% | 98.63% |
-| Active Warps per SM | 31.38 | 31.46 | 31.40 | 31.56 |
+| Achieved Occupancy | 98.39% | 98.08% | 98.13% | 98.52% |
+| Active Warps per SM | 31.49 | 31.39 | 31.40 | 31.53 |
 
 The results show that all four profiled CUDA variants achieved high occupancy, with achieved occupancy remaining above 98%. This indicates that a high proportion of the GPU's theoretical active warps were available during kernel execution.
 
