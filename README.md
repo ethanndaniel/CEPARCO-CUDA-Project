@@ -30,6 +30,12 @@ The mathematical definition is:
 asum = |A[0]| + |A[1]| + ... + |A[n-1]|
 ```
 
+The input vector A is initialized with sequential double-precision floating-point values, where each element is assigned its corresponding index:
+
+```
+A[i] = (double)i
+```
+
 The project includes the following implementations:
 
 1. C implementation (baseline)
