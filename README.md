@@ -16,8 +16,8 @@ https://colab.research.google.com/drive/1EojhZSnuqczWude7W41ZF374XOYGh4Xf?usp=sh
 | Name | GitHub |
 | :--- | :--- |
 | Dabuit, Daniel Jedrick C. | [@danueli](https://github.com/danueli) |
-| Magbatoc, Ethan Daniel | [@ethanndaniel](https://github.com/ethanndaniel) |
-| Perez, Jose Bryan | [@JoseBryanPerez](https://github.com/JoseBryanPerez) |
+| Magbatoc, Ethan Daniel B. | [@ethanndaniel](https://github.com/ethanndaniel) |
+| Perez, Jose Bryan L. | [@JoseBryanPerez](https://github.com/JoseBryanPerez) |
 | Uy, Tara Ysabel P. | [@tartar121](https://github.com/tartar121) |
 
 ### Project Specifications
