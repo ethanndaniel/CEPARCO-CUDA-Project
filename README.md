@@ -53,7 +53,7 @@ Each CUDA configuration performs 30 timed kernel executions. Correctness is chec
 
 ### AI Usage Declaration
 
-ChatGPT was used to help explain and review the CUDA code and understand CUDA functions. The group ran the programs, collected the benchmark and profiling results, and reviewed the code and report before submission. **add to reflect the whole group
+ChatGPT was used to help explain and review the CUDA code and understand CUDA functions. The group ran the programs, collected the benchmark and profiling results, and reviewed the code and report before submission. AI-generated suggestions were carefully reviewed and verified before being applied into the project.
 
 ---
 
@@ -118,7 +118,8 @@ Across the four CUDA variants, the `asum_kernel` accounts for the largest portio
 | V4 | 239.361 ms | 80.5% | 56.300 ms | 18.9% |
 | V5 | 240.870 ms | 80.5% | 56.333 ms | 18.8% |
 
-The profiling results show that the `asum_kernel` accounts for the largest portion of GPU execution time across all four CUDA variants. Unified Memory host-to-device transfers also contribute to GPU execution activity.
+
+The profiling results show that GPU kernel execution accounts for the largest portion of GPU activity across all four CUDA variants. The main ASUM kernel, `asum_kernel`, performs the majority of the computation, while the final reduction kernel, `final_kernel`, combines the partial sums produced by each block.
 
 V2 relies on automatic Unified Memory management, while V3, V4, and V5 use explicit prefetching to transfer data before kernel execution. This changes the timing and behavior of memory transfers observed by Nsight Systems.
 
@@ -223,9 +224,9 @@ $$
 |---|---:|---:|
 | C Baseline | 57.4267 ms | 1.00x |
 | CUDA V2 | 0.5161 ms | 111.27x |
-| CUDA V3 | 0.5208 ms | 110.29x |
-| CUDA V4 | 0.5246 ms | 109.49x |
-| CUDA V5 | 0.5362 ms | 107.14x |
+| CUDA V3 | 0.5208 ms | 110.27x |
+| CUDA V4 | 0.5246 ms | 109.47x |
+| CUDA V5 | 0.5362 ms | 107.10x |
 
 **Note:** These speedup values compare the C execution time against CUDA kernel execution time only. They exclude memory setup operations, prefetching, and other overhead, so they do not represent the speedup of the entire CUDA program.
 
@@ -243,7 +244,7 @@ These operations are performed before kernel execution and are reported separate
 
 #### CUDA V2: Unified Memory without Prefetch
 
-CUDA V2 does not perform explicit memory prefetching or page creation. Therefore, no separate memory setup time is reported for this variant.
+CUDA V2 does not perform explicit memory prefetching or page creation. Instead, it relies on CUDA's automatic Unified Memory management.
 
 #### CUDA V3: Prefetch Setup Time
 
@@ -297,7 +298,7 @@ The C implementation serves as the baseline for the CUDA speedup calculations.
 
 At 2^24 elements and a block size of 256, all four CUDA variants achieved substantially lower average kernel execution times than the C baseline.
 
-CUDA V2 achieved the highest measured kernel speedup at approximately 111.27x, followed by CUDA V4 at 109.49x, CUDA V5 at 107.14x, and CUDA V3 at 105.14x.
+CUDA V2 achieved the highest measured kernel speedup at approximately 111.27x, followed by CUDA V3 at 110.27x, CUDA V4 at 109.47x, and CUDA V5 at 107.10x.
 
 For the CPU implementations, SIMD YMM achieved the highest speedup among the x86-64 Assembly, SIMD XMM, and SIMD YMM implementations in the earlier benchmark.
 
@@ -333,7 +334,7 @@ Therefore, the decision to use prefetching should depend on the application's me
 
 ### E. Nsight Compute Analysis
 
-Nsight Compute was used to examine the individual CUDA kernel's performance characteristics.
+Nsight Compute was used to examine the individual CUDA kernel's performance characteristics. These measurements focus on the asum_kernel, which performs the main array processing and block-level reduction. The final_kernel, which combines the block partial sums, is not included in this specific NCU comparison.
 
 Unlike Nsight Systems, which provides an overall execution timeline, Nsight Compute provides more detailed kernel-level metrics.
 
