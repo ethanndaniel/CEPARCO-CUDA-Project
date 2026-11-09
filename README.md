@@ -59,7 +59,7 @@ Each CUDA configuration performs 30 timed kernel executions. Correctness is chec
 
 ### AI Usage Declaration
 
-ChatGPT was used to help explain and review the CUDA code and understand CUDA functions. The group ran the programs, collected the benchmark and profiling results, and reviewed the code and report before submission. AI-generated suggestions were carefully reviewed and verified before being applied into the project.
+ChatGPT was used to help explain and review the CUDA code and understand CUDA functions. The group ran the programs, collected the benchmark and profiling results, and reviewed the code and report before submission. AI-generated suggestions were carefully reviewed and verified before being applied to the project.
 
 ---
 
@@ -179,7 +179,7 @@ Nsight Systems was used to examine the execution timeline of the CUDA implementa
 
 ### Nsight Systems Summary
 
-Across the four CUDA variants, the `asum_kernel` accounts for the largest portion of GPU execution time. Unified Memory transfers also contribute to the overall execution time.
+Across the four CUDA variants, GPU kernel execution accounts for the largest portion of GPU activity. The main ASUM kernel, `asum_kernel`, performs the majority of the computation, while the final reduction kernel, `final_kernel`, combines the partial sums produced by each block.
 
 | Variant | Kernel Execution Time | Kernel Percentage | Unified Memory HtoD Time | HtoD Percentage |
 |---|---:|---:|---:|---:|
@@ -189,9 +189,7 @@ Across the four CUDA variants, the `asum_kernel` accounts for the largest portio
 | V5 | 251.164 ms | 81.0% | 56.362 ms | 18.2% |
 
 
-The profiling results show that GPU kernel execution accounts for the largest portion of GPU activity across all four CUDA variants. The main ASUM kernel, `asum_kernel`, performs the majority of the computation, while the final reduction kernel, `final_kernel`, combines the partial sums produced by each block.
-
-V2 relies on automatic Unified Memory management, while V3, V4, and V5 use explicit prefetching to transfer data before kernel execution. This changes the timing and behavior of memory transfers observed by Nsight Systems.
+The profiling results show that GPU kernel execution accounts for the largest portion of GPU activity across all four CUDA variants. V2 relies on automatic Unified Memory management, while V3, V4, and V5 use explicit prefetching to transfer data before kernel execution. This changes the timing and behavior of memory transfers observed by Nsight Systems.
 
 The profiling measurements were collected while Nsight Systems was monitoring the application. Therefore, these measurements are used to examine execution behavior and are not used as the official benchmark timings in the comparative tables.
 
@@ -206,44 +204,50 @@ The following table presents the average execution time of the C implementation 
 | Array Size | C Answer Key | Average Execution Time | Minimum Time | Maximum Time |
 |---|---:|---:|---:|---:|
 | 2^20 | 549755289600 | 3.2959 ms | 3 ms | 3.667 ms |
-| 2^24 | 140737479966720 | 54.219 ms | 51.12 ms | 60.942 ms |
+| 2^24 | 140737479966720 | 54.2190 ms | 51.12 ms | 60.942 ms |
 | 2^26 | 2251799780130816 | 225.2845 ms | 209.655 ms | 257.67 ms |
 
-### B. CUDA Average Kernel Execution Times
+The C implementation was compiled using GCC with the command `gcc CUDA_PROJECT_C.c -o CUDA_PROJECT_C`. No compiler optimization flags, such as `-O2` or `-O3`, were specified. Therefore, GCC used its default optimization setting (`-O0`), and the reported execution times reflect the C implementation compiled without optimization.
 
-The following tables show the average kernel execution times of each CUDA variant across the three tested array sizes and block sizes.
+### B. CUDA Average Combined Kernel Execution Times
+
+The CUDA execution times were measured using CUDA events. Each timed execution includes both the asum_kernel, which calculates the partial sums, and the final_kernel, which combines the partial sums to produce the final ASUM result.
+
+Each configuration was executed 30 times for every array size and block size. To reduce the effect of the initial GPU execution, the first execution was excluded when calculating the steady-state average for block size 256. For block sizes 512 and 1024, the reported average is based on the 30 executions.
+
+The following tables show the average combined kernel execution times in milliseconds (ms).
 
 #### CUDA V2: Unified Memory without Prefetch
 
 | Array Size | Block Size 256 | Block Size 512 | Block Size 1024 |
 |---|---:|---:|---:|
-| 2^20 | 0.1623 ms | 0.1966 ms | 0.3329 ms |
-| 2^24 | 1.367 ms | 0.5605 ms | 0.7157 ms |
-| 2^26 | 5.3368 ms | 2.1433 ms | 2.0639 ms |
+| 2^20 | 0.1003 ms | 0.1966 ms | 0.3329 ms |
+| 2^24 | 0.5403 ms | 0.5605 ms | 0.7157 ms |
+| 2^26 | 2.1135 ms | 2.1433 ms | 2.0639 ms |
 
 #### CUDA V3: Unified Memory with Prefetch
 
 | Array Size | Block Size 256 | Block Size 512 | Block Size 1024 |
 |---|---:|---:|---:|
-| 2^20 | 0.0785 ms | 0.141 ms | 0.2939 ms |
-| 2^24 | 0.5364 ms | 0.5502 ms | 0.6174 ms |
-| 2^26 | 2.0776 ms | 2.088 ms | 2.0402 ms |
+| 2^20 | 0.0720 ms | 0.1410 ms | 0.2939 ms |
+| 2^24 | 0.5321 ms | 0.5502 ms | 0.6174 ms |
+| 2^26 | 2.0730 ms | 2.0880 ms | 2.0402 ms |
 
 #### CUDA V4: Unified Memory with Prefetch and Explicit Page Creation
 
 | Array Size | Block Size 256 | Block Size 512 | Block Size 1024 |
 |---|---:|---:|---:|
-| 2^20 | 0.1087 ms | 0.1995 ms | 0.4191 ms |
-| 2^24 | 0.5395 ms | 0.553 ms | 0.6171 ms |
-| 2^26 | 2.1234 ms | 2.1225 ms | 2.2456 ms |
+| 2^20 | 0.1008 ms | 0.1995 ms | 0.4191 ms |
+| 2^24 | 0.5326 ms | 0.5530 ms | 0.6171 ms |
+| 2^26 | 2.1193 ms | 2.1225 ms | 2.2456 ms |
 
 #### CUDA V5: Unified Memory with Prefetch, Explicit Page Creation, and Memory Advice
 
 | Array Size | Block Size 256 | Block Size 512 | Block Size 1024 |
 |---|---:|---:|---:|
-| 2^20 | 0.0709 ms | 0.1233 ms | 0.2512 ms |
-| 2^24 | 0.5279 ms | 0.5359 ms | 0.5541 ms |
-| 2^26 | 2.0595 ms | 2.0353 ms | 2.0355 ms |
+| 2^20 | 0.0632 ms | 0.1233 ms | 0.2512 ms |
+| 2^24 | 0.5239 ms | 0.5359 ms | 0.5541 ms |
+| 2^26 | 2.0560 ms | 2.0353 ms | 2.0355 ms |
 
 All CUDA configurations passed the correctness check against the C answer key.
 
@@ -282,29 +286,27 @@ A speedup greater than 1 indicates that the implementation is faster than the C 
 
 For a consistent comparison, the following table uses the C baseline and CUDA results at 2^24 elements.
 
-The selected CUDA configuration uses a block size of 256 threads.
+The selected CUDA configuration uses a block size of 256 threads. The CUDA execution times use the steady-state averages reported in Section B.
 
 $$
 \text{Speedup} =
 \frac{\text{C Average Execution Time}}
-{\text{CUDA Average Kernel Execution Time}}
+{\text{CUDA Average Combined Kernel Execution Time}}
 $$
 
 | Implementation | Average Execution Time | Speedup vs. C |
 |---|---:|---:|
-| C Baseline | 54.2189 ms | 1.00x |
-| CUDA V2 | 1.367 ms | 39.66x |
-| CUDA V3 | 0.5364 ms | 101.08x |
-| CUDA V4 | 0.5395 ms | 100.5x |
-| CUDA V5 | 0.5279 ms | 102.71x |
+| C Baseline (Program Execution) | 54.2190 ms | 1.00x |
+| CUDA V2 (Combined Kernel Time) | 0.5403 ms | 100.35x |
+| CUDA V3 (Combined Kernel Time) | 0.5321 ms | 101.90x |
+| CUDA V4 (Combined Kernel Time) | 0.5326 ms | 101.80x |
+| CUDA V5 (Combined Kernel Time) | 0.5239 ms | 103.49x |
 
 **Note:** These speedup values compare the C execution time against CUDA kernel execution time only. They exclude memory setup operations, prefetching, and other overhead, so they do not represent the speedup of the entire CUDA program.
 
-The results show that CUDA V2 achieved the lowest average kernel execution time among the four CUDA variants at 2^24 elements using a block size of 256. It was followed by CUDA V3, V4, and V5.
+The results show that CUDA V5 achieved the lowest combined kernel execution time among the four CUDA variants at 2^24 elements using a block size of 256. It was followed by CUDA V3, V4, and V2.
 
-CUDA V5 did not achieve better kernel performance than V4 in this configuration, despite the addition of memory advice.
-
-**Note:** V4's block size 512 result was slightly lower at 0.5236 ms. However, this speedup table uses block size 256 for every CUDA variant to maintain a consistent configuration.
+Although the differences between the CUDA variants are relatively small, V5 achieved the highest kernel speedup in this configuration.
 
 ### E. CUDA Memory Setup Time
 
@@ -320,9 +322,9 @@ CUDA V2 does not perform explicit memory prefetching or page creation. Instead, 
 
 | Array Size | Prefetch Time |
 |---|---:|
-| 2^20 | 0.9368 ms |
-| 2^24 | 11.4888 ms |
-| 2^26 | 46.1292 ms |
+| 2^20 | 0.8515 ms |
+| 2^24 | 11.2742 ms |
+| 2^26 | 45.5171 ms |
 
 #### CUDA V4: Page Creation and Prefetch Setup Time
 
@@ -348,17 +350,17 @@ The results show that memory preparation introduces additional overhead before k
 
 ### A. Analysis of Kernel Execution Time
 
-The CUDA results show that the use of Unified Memory prefetching and explicit page creation can affect kernel execution performance.
+The CUDA results show that the use of Unified Memory prefetching, explicit page creation, and memory advice can affect kernel execution performance.
 
-CUDA V2 uses Unified Memory without explicit prefetching. In the standalone benchmark results, V2 achieved the lowest average kernel execution time at block size 256 across all three tested array sizes. This shows that the additional memory preparation steps in the other variants did not produce lower kernel execution times in this particular benchmark.
+CUDA V2 uses Unified Memory without explicit prefetching. Based on the steady-state results, it generally had higher kernel execution times than the other CUDA variants.
 
 CUDA V3 introduces memory prefetching before kernel execution. This allows the required memory to be transferred to the GPU before the kernel accesses it.
 
-CUDA V4 adds explicit page creation before prefetching. This involves touching memory pages on the CPU before the GPU accesses them. The results show that V4 achieved the lowest average kernel execution time at 2^24 elements with a block size of 512, although its block size 256 result was very close.
+CUDA V4 adds explicit page creation before prefetching. This involves touching memory pages on the CPU before the GPU accesses them.
 
-CUDA V5 adds `cudaMemAdvise` with `cudaMemAdviseSetReadMostly` before prefetching. This provides the CUDA runtime with information about the expected memory access pattern. However, V5 did not outperform V4 in every configuration.
+CUDA V5 adds `cudaMemAdvise` with `cudaMemAdviseSetReadMostly` before prefetching. Based on the measured results, V5 achieved the lowest combined kernel execution time across the tested array sizes and block sizes.
 
-Although V4 and V5 can reduce kernel execution time, their additional memory setup operations also introduce overhead. In particular, explicit page creation and memory prefetching require additional time before the kernel executes. Therefore, kernel execution time alone does not represent the entire cost of each implementation.
+Although V5 achieved the lowest kernel execution times, its additional memory preparation operations also introduced overhead. In particular, explicit page creation and memory advice required additional time before kernel execution. Therefore, kernel execution time alone does not represent the entire cost of each implementation.
 
 This distinction is important because a CUDA variant with a faster kernel may still require more time to prepare its memory before execution.
 
@@ -366,25 +368,25 @@ This distinction is important because a CUDA variant with a faster kernel may st
 
 The C implementation serves as the baseline for the CUDA speedup calculations.
 
-At 2^24 elements and a block size of 256, all four CUDA variants achieved substantially lower average kernel execution times than the C baseline.
+At 2^24 elements and a block size of 256, all four CUDA variants achieved substantially lower average combined kernel execution times than the C baseline.
 
-CUDA V5 achieved the highest measured kernel speedup at approximately 102.71x, followed by CUDA V3 at 101.08x, CUDA V4 at 100.5x, and CUDA V2 at 39.66x.
+CUDA V5 achieved the highest measured kernel speedup at approximately 103.49x, followed by CUDA V3 at 101.90x, CUDA V4 at 101.80x, and CUDA V2 at 100.35x.
 
 For the CPU implementations, SIMD YMM achieved the highest speedup among the x86-64 Assembly, SIMD XMM, and SIMD YMM implementations in the earlier benchmark.
 
-However, the CPU and CUDA results were obtained under different experimental conditions. Additionally, the CUDA speedup calculations use kernel execution times and exclude memory setup operations. Consequently, these speedup values should not be interpreted as a direct comparison of total execution time between the CPU and GPU implementations.
+However, the CPU and CUDA results were obtained under different experimental conditions. Additionally, the CUDA speedup calculations use combined kernel execution times and exclude memory setup operations. Consequently, these speedup values should not be interpreted as a direct comparison of total execution time between the CPU and GPU implementations.
 
 ### C. Effect of CUDA Block Size
 
 The CUDA implementations were tested using block sizes of 256, 512, and 1024 threads.
 
-For 2^20 elements, block size 256 consistently achieved the lowest average kernel execution time across the four CUDA variants.
+For 2^20 elements, block size 256 consistently achieved the lowest average combined kernel execution time across all four CUDA variants.
 
-For 2^24 elements, block size 256 performed best for V2 and V3, while block size 512 achieved slightly lower average times for V4 and V5.
+For 2^24 elements, block size 256 also achieved the lowest execution time across all four CUDA variants.
 
-For 2^26 elements, the results were closer across the three block sizes. Some variants performed slightly better with block sizes 512 or 1024.
+For 2^26 elements, the results varied depending on the CUDA variant. V2 and V3 performed best with block size 1024, while V4 performed best with block size 256. V5 performed best with block size 512, although its result with block size 1024 was nearly identical.
 
-Based on the measured results, block size 256 generally performed well for smaller and medium-sized arrays. However, the results also show that the best block size can depend on the input size and the GPU's execution characteristics.
+Based on the measured results, block size 256 generally performed well for smaller and medium-sized arrays. However, the results also show that the best block size can depend on the input size and the CUDA implementation.
 
 This shows that increasing the block size does not automatically result in better performance.
 
@@ -421,9 +423,11 @@ The following results were collected for the selected `asum_kernel` configuratio
 | Achieved Occupancy | 98.39% | 98.08% | 98.13% | 98.52% |
 | Active Warps per SM | 31.49 | 31.39 | 31.40 | 31.53 |
 
+Unlike the regular CUDA benchmark, which measures the combined execution time of both kernels, the Nsight Compute results focus only on `asum_kernel`. Therefore, the kernel duration reported by Nsight Compute should not be directly compared with the combined execution times in Section B.
+
 The results show that all four profiled CUDA variants achieved high occupancy, with achieved occupancy remaining above 98%. This indicates that a high proportion of the GPU's theoretical active warps were available during kernel execution.
 
-DRAM throughput was relatively high across all four variants, ranging from 88.04% to 90.28%. This suggests that memory activity is an important factor in the kernel's performance. Meanwhile, compute throughput ranged from 69.93% to 71.32%.
+DRAM throughput ranged from 87.85% to 91.05% across the four variants. This suggests that memory activity is an important factor in the kernel's performance.
 
 All four variants also used the same number of registers per thread. This indicates that the changes in memory management did not affect this particular kernel resource metric.
 
@@ -475,13 +479,11 @@ The group observed that explicit page creation and memory advice introduced addi
 
 One important observation was that improving kernel execution time does not necessarily mean improving the entire program's execution time.
 
-For example, CUDA V4 achieved competitive kernel execution times among the tested CUDA variants. However, its page creation step also introduced additional overhead.
+For example, CUDA V5 achieved the lowest combined kernel execution times across the tested configurations. However, its page creation and memory advice operations also introduced additional overhead. This showed that improving kernel execution time does not necessarily improve the total execution time of the entire program.
 
 Another observation was that increasing the CUDA block size does not automatically result in better performance. Block size 256 generally performed well for the smaller and medium-sized arrays in this project.
 
 The group also learned that Nsight Systems and Nsight Compute provide different types of performance information. Nsight Systems helps identify where time is spent across the application, while Nsight Compute helps explain how an individual kernel uses GPU resources.
-
-Another important observation was that the fastest kernel does not necessarily mean the fastest overall implementation. V4 and V5 achieved competitive kernel execution times, but their page creation and memory preparation steps introduced considerable additional overhead. This showed the importance of considering both computation time and memory management overhead when evaluating GPU performance.
 
 ---
 
