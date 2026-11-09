@@ -65,23 +65,39 @@ The following screenshots show the program outputs and correctness checks for ea
 
 The C implementation serves as the baseline for checking the correctness of the other implementations.
 
-![C Output](Screenshots/C_Output.png)
+![C Output](Screenshots/nvcc/C_Output.png)
 
 ### CUDA V2: Unified Memory without Prefetch
 
-![CUDA V2 Output](Screenshots/V2_Output.png)
+![CUDA V2 Output](Screenshots/nvcc/CudaV2_2^20.png)
+
+![CUDA V2 Output](Screenshots/nvcc/CudaV2_2^20.png)
+
+![CUDA V2 Output](Screenshots/nvcc/CudaV2_2^20.png)
 
 ### CUDA V3: Unified Memory with Prefetch
 
-![CUDA V3 Output](Screenshots/V3_Output.png)
+![CUDA V3 Output](Screenshots/nvcc/CudaV3_2^20.png)
+
+![CUDA V3 Output](Screenshots/nvcc/CudaV3_2^24.png)
+
+![CUDA V3 Output](Screenshots/nvcc/CudaV3_2^26.png)
 
 ### CUDA V4: Unified Memory with Prefetch and Explicit Page Creation
 
-![CUDA V4 Output](Screenshots/V4_Output.png)
+![CUDA V4 Output](Screenshots/nvcc/CudaV4_2^20.png)
+
+![CUDA V4 Output](Screenshots/nvcc/CudaV4_2^24.png)
+
+![CUDA V4 Output](Screenshots/nvcc/CudaV4_2^26.png)
 
 ### CUDA V5: Unified Memory with Prefetch, Explicit Page Creation, and Memory Advice
 
-![CUDA V5 Output](Screenshots/V5_Output.png)
+![CUDA V5 Output](Screenshots/nvcc/CudaV5_2^20.png)
+
+![CUDA V5 Output](Screenshots/nvcc/CudaV5_2^24.png)
+
+![CUDA V5 Output](Screenshots/nvcc/CudaV5_2^26.png)
 
 All CUDA configurations passed the correctness checks against the C implementation.
 
@@ -93,19 +109,19 @@ Nsight Systems was used to examine the execution timeline of the CUDA implementa
 
 ### CUDA V2
 
-![Nsight Systems V2](Screenshots/Nsight/V2_Nsight.png)
+![Nsight Systems V2](Screenshots/nsight/V2_Nsight.png)
 
 ### CUDA V3
 
-![Nsight Systems V3](Screenshots/Nsight/V3_Nsight.png)
+![Nsight Systems V3](Screenshots/nsight/V3_Nsight.png)
 
 ### CUDA V4
 
-![Nsight Systems V4](Screenshots/Nsight/V4_Nsight.png)
+![Nsight Systems V4](Screenshots/nsight/V4_Nsight.png)
 
 ### CUDA V5
 
-![Nsight Systems V5](Screenshots/Nsight/V5_Nsight.png)
+![Nsight Systems V5](Screenshots/nsight/V5_Nsight.png)
 
 ### Nsight Systems Summary
 
